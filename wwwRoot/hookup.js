@@ -57,17 +57,17 @@ function step() {
 
   context.beginPath();
   context.lineWidth = 1;
-  context.strokeStyle = '#ddd';
+  context.strokeStyle = '#bbb';
   for (var x = 10; x < 400; x += 10) {
     context.moveTo(x, 0);
     context.lineTo(x, 400);
-    context.stroke();
   }
   for (var y = 10; y < 400; y += 10) {
     context.moveTo(0, y);
     context.lineTo(400, y);
-    context.stroke();
   }
+  context.stroke();
+  context.closePath();
 
   fpsCounter.update();
   fpsCounter.draw(context);
@@ -80,6 +80,7 @@ function step() {
     context.lineWidth = 1;
     context.strokeStyle = '#000';
     context.stroke();
+    context.closePath();
   });
 
   [A, B].forEach(function(item) {

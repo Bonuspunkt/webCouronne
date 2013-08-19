@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <title>circle collision</title>
+  <link rel="stylesheet" href="stylesheet.css" type="text/css">
+ </head>
+ <body>
+  <form>
+
+    <fieldset style="float: left;">
+      <label>
+        A.x
+        <input name="ax">
+      </label>
+      <label>
+        A.y
+        <input name="ay">
+      </label>
+      <label>
+        radius
+        <input name="aradius">
+      </label>
+      <label>
+        mass
+        <input name="amass">
+      </label>
+      <label>
+        A.vector.x
+        <input name="avx">
+      </label>
+      <label>
+        A.vector.y
+        <input name="avy">
+      </label>
+    </fieldset>
+
+    <fieldset style="float: left;">
+      <label>
+        B.x
+        <input name="bx">
+      </label>
+      <label>
+        B.y
+        <input name="by">
+      </label>
+      <label>
+        radius
+        <input name="bradius">
+      </label>
+      <label>
+        mass
+        <input name="bmass">
+      </label>
+      <label>
+        B.vector.x
+        <input name="bvx">
+      </label>
+      <label>
+        B.vector.y
+        <input name="bvy">
+      </label>
+    </fieldset>
+
+    <input type="submit" value="RUN" />
+  </form>
+  <div id="result"></div>
+  <canvas width="400" height="400"></canvas>
+
+  <script>var module = {};</script>
+  <script src="ball.js"></script>
+  <script src="vector.js"></script>
+  <script src="detectCollision.js"></script>
+  <script src="resolveCollision.js"></script>
+  <script src="hookup.js"></script>
+ </body>
+</html>

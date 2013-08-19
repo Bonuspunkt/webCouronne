@@ -10,7 +10,7 @@ Vector.prototype.distance = function(vector) {
 };
 
 Vector.prototype.magnitude = function() {
-  return Math.pow(Math.pow(this.x, 2) + Math.pow(this.y, 2), 0.5);
+  return Math.sqrt(this.x * this.x + this.y * this.y);
 };
 
 Vector.prototype.dot = function(vector) {

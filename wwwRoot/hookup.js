@@ -18,6 +18,35 @@
   window.requestAnimationFrame = requestAnimationFrame;
 }());
 
+var fpsCounter = (function() {
+  var COUNT = 30;
+  var stored = new Array(COUNT);
+  var curr = 0;
+  var fps;
+
+  var lastRender = Date.now();
+
+  return {
+    update: function(ticks) {
+      var now = Date.now();
+      var ticks = now - lastRender;
+      lastRender = now;
+
+      stored[curr] = ticks;
+      curr = (curr + 1) % COUNT;
+
+      var tickSum = stored.reduce(function(prev, curr) { return prev + curr; });
+      fps = 1000 / (tickSum / COUNT) | 0;
+    },
+
+    draw: function(context) {
+      context.fillStyle = '#000';
+      context.fillText(fps + 'fps', 10, 20);
+    }
+
+  };
+}())
+
 var canvasEl = document.querySelector('canvas');
 var context = canvasEl.getContext('2d');
 
@@ -40,15 +69,34 @@ function step() {
     context.stroke();
   }
 
-  [A,B].forEach(function(item) {
+  fpsCounter.update();
+  fpsCounter.draw(context);
+
+  [A,B].forEach(function(item, i) {
     context.beginPath();
     context.arc(item.center.x, item.center.y, item.radius, 0, 2 * Math.PI, false);
-    context.fillStyle = 'red';
+    context.fillStyle = (i === 0) ? '#F88' : '#88F';
     context.fill();
     context.lineWidth = 1;
-    context.strokeStyle = '#010';
+    context.strokeStyle = '#000';
     context.stroke();
   });
+
+  [A, B].forEach(function(item) {
+    if (item.center.x < item.radius) {
+      item.moveVector = new Vector(-item.moveVector.x, item.moveVector.y);
+    }
+    if (item.center.x > canvasEl.width - item.radius) {
+      item.moveVector = new Vector(-item.moveVector.x, item.moveVector.y);
+    }
+    if (item.center.y < item.radius) {
+      item.moveVector = new Vector(item.moveVector.x, -item.moveVector.y);
+    }
+    if (item.center.y > canvasEl.height - item.radius) {
+      item.moveVector = new Vector(item.moveVector.x, -item.moveVector.y);
+    }
+
+  })
 
   var collision = detectCollision(A, B);
   if (collision === false) {

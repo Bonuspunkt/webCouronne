@@ -10,6 +10,19 @@ function gatherCollisions() {
   var collisions = [];
   var i;
 
+  function collideBorder(flag, el, xFactor, yFactor) {
+    if (flag !== false && flag <= 1) {
+      collisions.push({
+        time: flag,
+        handle: function() {
+          el.moveVector = new Vector(
+            xFactor * el.moveVector.x,
+            yFactor * el.moveVector.y);
+        }
+      });
+    }
+  }
+
   for (i = 0; i < els.length; i++) {
     var el = els[i];
 
@@ -18,58 +31,22 @@ function gatherCollisions() {
     // time = ( item.Radius - item.center.x ) / item.moveVector.x
 
     var collidesLeft = el.center.x + el.moveVector.x < el.radius
+        && el.moveVector.x < 0
         && ( el.radius - el.center.x ) / el.moveVector.x;
     var collidesRight = el.center.x + el.moveVector.x > game.canvasEl.width - el.radius
+        && el.moveVector.x > 0
         && ( game.canvasEl.width - el.radius - el.center.x ) / el.moveVector.x;
     var collidesTop = el.center.y + el.moveVector.x < el.radius
+        && el.moveVector.y < 0
         && ( el.radius - el.center.y ) / el.moveVector.y;
     var collidesBottom = el.center.y + el.moveVector.y > game.canvasEl.height - el.radius
+        && el.moveVector.y > 0
         && ( game.canvasEl.height - el.radius - el.center.y ) / el.moveVector.x;
 
-    if (collidesLeft !== false && collidesLeft <= 1) {
-      collisions.push({
-        time: collidesLeft,
-        handle: (function() {
-          var el = els[i];
-          return function() {
-            el.moveVector = new Vector(-el.moveVector.x, el.moveVector.y);
-          };
-        }())
-      })
-    }
-    if (collidesRight !== false && collidesRight <= 1) {
-      collisions.push({
-        time: collidesTop,
-        handle: (function() {
-          var el = els[i];
-          return function() {
-            el.moveVector = new Vector(-el.moveVector.x, el.moveVector.y);
-          };
-        }())
-      })
-    }
-    if (collidesTop !== false && collidesTop <= 1) {
-      collisions.push({
-        time: collidesTop,
-        handle: (function() {
-          var el = els[i];
-          return function() {
-            el.moveVector = new Vector(el.moveVector.x, -el.moveVector.y);
-          };
-        }())
-      })
-    }
-    if (collidesBottom !== false && collidesBottom <= 1) {
-      collisions.push({
-        time: collidesLeft,
-        handle: (function() {
-          var el = els[i];
-          return function() {
-            el.moveVector = new Vector(el.moveVector.x, -el.moveVector.y);
-          };
-        }())
-      })
-    }
+    collideBorder(collidesLeft, els[i], -1, 1);
+    collideBorder(collidesRight, els[i], -1, 1);
+    collideBorder(collidesTop, els[i], 1, -1);
+    collideBorder(collidesBottom, els[i], 1, -1);
   }
 
   for (i = 0; i < els.length; i++) {

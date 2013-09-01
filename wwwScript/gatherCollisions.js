@@ -33,15 +33,18 @@ function gatherCollisions() {
     var collidesLeft = el.center.x + el.moveVector.x < el.radius
         && el.moveVector.x < 0
         && ( el.radius - el.center.x ) / el.moveVector.x;
+
     var collidesRight = el.center.x + el.moveVector.x > game.canvasEl.width - el.radius
         && el.moveVector.x > 0
         && ( game.canvasEl.width - el.radius - el.center.x ) / el.moveVector.x;
-    var collidesTop = el.center.y + el.moveVector.x < el.radius
+
+    var collidesTop = el.center.y + el.moveVector.y < el.radius
         && el.moveVector.y < 0
         && ( el.radius - el.center.y ) / el.moveVector.y;
+
     var collidesBottom = el.center.y + el.moveVector.y > game.canvasEl.height - el.radius
         && el.moveVector.y > 0
-        && ( game.canvasEl.height - el.radius - el.center.y ) / el.moveVector.x;
+        && ( game.canvasEl.height - el.radius - el.center.y ) / el.moveVector.y;
 
     collideBorder(collidesLeft, els[i], -1, 1);
     collideBorder(collidesRight, els[i], -1, 1);

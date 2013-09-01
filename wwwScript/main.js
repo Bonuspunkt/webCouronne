@@ -39,8 +39,8 @@ function step() {
 
     var collision = collisions[0];
 
-    game.elements.forEach(function(obj){
-      obj.update(collision.time);
+    game.elements.forEach(function(el){
+      el.update(collision.time);
     });
     collision.handle();
 

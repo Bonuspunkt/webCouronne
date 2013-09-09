@@ -1,5 +1,3 @@
-"use strict"
-
 function resolveCollision(circle1, circle2) {
 
   // First, find the normalized vector n from the center of

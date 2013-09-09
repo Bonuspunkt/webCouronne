@@ -8,9 +8,15 @@ var game = require('./game');
 var hookup = require('hookup');
 var fpsCounter = require('./elements/fpsCounter');
 var grid = require('./elements/grid')(canvasEl);
-var gatherCollisions = require('./gatherCollisions')
+var gatherCollisions = require('./gatherCollisions');
+var table = require('./elements/table');
+var Vector = require('./vector');
+var init = require('./init');
 
 game.canvasEl = canvasEl;
+
+grid.draw(context);
+table.draw(context);
 
 function step() {
 
@@ -18,6 +24,8 @@ function step() {
 
   // draw grid
   grid.draw(context);
+  table.draw(context);
+
 
   // draw fps
   fpsCounter.update();
@@ -27,6 +35,9 @@ function step() {
   game.elements.forEach(function(item) {
     item.draw(context);
   });
+
+
+  // draw end
 
   // collision detection
   var collisions = [];
@@ -50,10 +61,23 @@ function step() {
   if (interval > 0) {
     game.elements.forEach(function(el) { el.update(interval); });
   }
+  game.elements.forEach(function(el) {
+    el.moveVector = el.moveVector.times(0.99);
+    if (el.moveVector.magnitude() < 0.02) {
+      el.moveVector = new Vector(0,0);
+    }
+  });
 
-  // loop
-  if (game.run) {
+  var movingEls = game.elements.filter(function(el) {
+    return el.moveVector.magnitude() > 0;
+  });
+
+  if (movingEls.length !== 0) {
     requestAnimationFrame(step);
+  } else {
+    game.fireEvent('done');
   }
 }
 window.step = step;
+
+init();

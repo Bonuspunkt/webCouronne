@@ -5,8 +5,7 @@ var Vector = require('./vector');
 
 (function(){
   var data = {
-    "ax":10,"ay":200,"aradius":5,"amass":10,"avx":1,"avy":0,
-    "bx":390,"by":200,"bradius":5,"bmass":10,"bvx":-1,"bvy":0
+    "ax":150,"ay":240,"aradius":10,"amass":10,"avx":0,"avy":-1
   };
 
   var inputs = document.querySelectorAll('input[name]');
@@ -16,17 +15,13 @@ var Vector = require('./vector');
 }());
 
 
+
 var submitEl = document.querySelector('input[type=submit]');
+submitEl.focus();
 submitEl.addEventListener('click', function(e) {
   e.preventDefault();
 
-  if (game.run) {
-    this.value = 'RUN';
-    game.run = false;
-    return;
-  }
-  this.value = 'STOP';
-  game.run = true;
+  submitEl.disabled = true;
 
   var values = {};
   var inputs = document.querySelectorAll('input[name]');
@@ -39,17 +34,20 @@ submitEl.addEventListener('click', function(e) {
     values.aradius,
     values.amass,
     new Vector(values.avx, values.avy),
-    '#F88'
+    '#FF0'
   );
-  B = new Ball(
-    new Vector(values.bx, values.by),
-    values.bradius,
-    values.bmass,
-    new Vector(values.bvx, values.bvy),
-    '#8F8'
-  );
+  game.elements.push(A);
 
-  game.elements = [A,B];
+  function removeBall() {
+    submitEl.disabled = false;
+    game.un('done', removeBall);
+    var index =game.elements.indexOf(A);
+    if (index === -1) { return; }
+
+    game.elements.splice(game.elements.indexOf(A), 1);
+    step();
+  }
+  game.on('done', removeBall);
 
   step();
 });

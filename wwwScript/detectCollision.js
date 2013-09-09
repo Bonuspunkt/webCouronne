@@ -1,5 +1,3 @@
-"use strict";
-
 function detectCollision(A, B) {
 
   var movevec = A.moveVector.minus(B.moveVector);
@@ -11,6 +9,10 @@ function detectCollision(A, B) {
   var sumRadii = (B.radius + A.radius);
   dist -= sumRadii;
   if (movevec.magnitude() < dist){
+    return false;
+  }
+
+  if (movevec.x === 0 && movevec.y === 0) {
     return false;
   }
 
@@ -76,7 +78,6 @@ function detectCollision(A, B) {
   var tillCollision = N.times(distance);
 
   var timeTillCollision = tillCollision.magnitude() / movevec.magnitude();
-
 
   return timeTillCollision;
 }

@@ -27,5 +27,4 @@ var fpsCounter = (function() {
   };
 }());
 
-
 module.exports = fpsCounter;

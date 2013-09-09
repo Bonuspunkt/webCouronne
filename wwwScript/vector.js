@@ -1,9 +1,7 @@
-"use strict";
-
 function Vector(x, y) {
   this.x = x;
   this.y = y;
-};
+}
 
 Vector.prototype.distance = function(vector) {
   return this.minus(vector).magnitude();
@@ -14,7 +12,7 @@ Vector.prototype.magnitude = function() {
 };
 
 Vector.prototype.dot = function(vector) {
-  return this.x * vector.x + this.y * vector.y
+  return this.x * vector.x + this.y * vector.y;
 };
 
 
@@ -29,7 +27,7 @@ Vector.prototype.add = function(vector) {
       this.x + vector.x,
       this.y + vector.y
     );
-}
+};
 
 Vector.prototype.minus = function(vector) {
 
@@ -43,7 +41,7 @@ Vector.prototype.minus = function(vector) {
     this.x - vector.x,
     this.y - vector.y
   );
-}
+};
 
 Vector.prototype.normalize = function() {
   var magnitude = this.magnitude();

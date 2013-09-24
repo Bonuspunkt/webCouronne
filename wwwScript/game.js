@@ -3,6 +3,7 @@ var events = {};
 var game = module.exports = {
   run: false,
   elements: [],
+  deadElements: [],
   on:  function(event, handler) {
     events[event] = events[event] || [];
     events[event].push(handler);

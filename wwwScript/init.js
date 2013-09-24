@@ -3,6 +3,8 @@ var game = require('./game');
 var Ball = require('./elements/ball');
 var Vector = require('./vector');
 
+var draw = require('./draw');
+
 module.exports = function() {
   game.elements = [];
   game.elements.push(
@@ -42,5 +44,5 @@ module.exports = function() {
     );
   }
 
-  step();
-}
+  draw();
+};

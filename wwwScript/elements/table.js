@@ -1,21 +1,33 @@
+var game = require('../game');
+var Vector = require('../vector');
+
 var table = {
+
+  holes: [
+    new Vector( 40, 40),
+    new Vector(260, 40),
+    new Vector( 40,260),
+    new Vector(260,260)
+  ],
   update: function() {},
   draw: function(context) {
 
     context.beginPath();
     context.lineWidth = 0;
     context.fillStyle = '#111';
-    context.arc( 40, 40,20,0, 2 * Math.PI, false);
-    context.moveTo(260, 50);
-    context.arc(260, 40,20,0, 2 * Math.PI, false);
-    context.moveTo(40, 270);
-    context.arc( 40,260,20,0, 2 * Math.PI, false);
-    context.moveTo(260, 270);
-    context.arc(260,260,20,0, 2 * Math.PI, false);
+    this.holes.forEach(function(pos) {
+      context.moveTo(pos.x, pos.y);
+      context.arc(pos.x,pos.y,20,0, 2 * Math.PI, false);
+    });
     context.stroke();
     context.fill();
     context.closePath();
 
+    game.deadElements.forEach(function(el) {
+      el.draw(context);
+    });
+
+    // red drawing on table
     context.beginPath();
     context.lineWidth = 2;
     context.strokeStyle = '#b00';

@@ -16,5 +16,14 @@ module.exports = {
     send(req, url.parse(req.url).pathname)
       .root(wwwRoot)
       .pipe(res);
+  },
+
+  upgrade: function(helper) {
+    //helper.request decisoins?
+    var webSocket = helper.accept();
+    // TODO: launch
+    webSocket.on('message', function(message) {
+      console.log('wsIN', message);
+    })
   }
 };

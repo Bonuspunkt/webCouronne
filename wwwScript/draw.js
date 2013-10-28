@@ -5,7 +5,7 @@ var canvasEl = game.canvasEl;
 var grid = require('./elements/grid')(canvasEl);
 var table = require('./elements/table');
 var fpsCounter = require('./elements/fpsCounter');
-
+var mousePos = require('./elements/mousePosition')(canvasEl);
 var context = game.context;
 
 module.exports = function draw() {
@@ -18,6 +18,8 @@ module.exports = function draw() {
   // draw fps
   fpsCounter.update();
   fpsCounter.draw(context);
+
+  mousePos.draw(context);
 
   // draw circles
   game.elements.forEach(function(item) {

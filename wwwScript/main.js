@@ -7,7 +7,7 @@ var game = require('./game');
 game.canvasEl = canvasEl;
 game.context = context;
 
-var hookup = require('hookup');
+var hookup = require('./hookup');
 var init = require('./init');
 
 init();

@@ -1,8 +1,8 @@
 var game = require('./game');
-var detectCollision = require('detectCollision');
-var resolveCollision = require('resolveCollision');
+var detectCollision = require('./detectCollision');
+var resolveCollision = require('./resolveCollision');
 
-var Vector = require('./vector');
+var Vector = require('hna').Vector2;
 
 
 function minCheck(el, xy, min) {

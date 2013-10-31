@@ -1,7 +1,7 @@
 var game = require('./game');
 var gatherCollisions = require('./gatherCollisions');
-var Vector = require('vector');
-var table = require('elements/table');
+var Vector = require('hna').Vector2;
+var table = require('./elements/table');
 
 function sort(a,b) {
   return a.time - b.time;
@@ -29,15 +29,15 @@ module.exports = function step() {
     game.elements.forEach(function(el) { el.update(interval); });
   }
   game.elements.forEach(function(el) {
-    el.moveVector = el.moveVector.times(0.99);
-    if (el.moveVector.magnitude() < 0.02) {
+    el.moveVector = el.moveVector.multiply(0.99);
+    if (el.moveVector.length < 0.02) {
       el.moveVector = new Vector(0,0);
     }
   });
 
   table.holes.forEach(function(hole) {
     game.elements.forEach(function(el, index) {
-      var distance = hole.minus(el.center).magnitude();
+      var distance = hole.substract(el.center).length;
       if (distance < 15) {
         game.elements.splice(index, 1);
         game.deadElements.push(el);

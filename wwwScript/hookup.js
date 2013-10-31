@@ -1,10 +1,10 @@
 var game = require('./game');
 
 var Ball = require('./elements/ball');
-var Vector = require('./vector');
+var Vector = require('hna').Vector2;
 
-var step = require('step');
-var draw = require('draw');
+var step = require('./step');
+var draw = require('./draw');
 
 (function(){
   var data = {
@@ -62,7 +62,7 @@ submitEl.addEventListener('click', function(e) {
     step();
 
     var movingEls = game.elements.filter(function(el) {
-      return el.moveVector.magnitude() > 0;
+      return el.moveVector.length > 0;
     });
 
     if (movingEls.length === 0) {

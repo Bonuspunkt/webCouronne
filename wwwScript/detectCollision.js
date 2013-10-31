@@ -1,14 +1,14 @@
 function detectCollision(A, B) {
 
-  var movevec = A.moveVector.minus(B.moveVector);
+  var movevec = A.moveVector.substract(B.moveVector);
 
   // Early Escape test: if the length of the movevec is less
   // than distance between the centers of these circles minus
   // their radii, there's no way they can hit.
-  var dist = B.center.distance(A.center);
+  var dist = B.center.substract(A.center).length;
   var sumRadii = (B.radius + A.radius);
   dist -= sumRadii;
-  if (movevec.magnitude() < dist){
+  if (movevec.length < dist){
     return false;
   }
 
@@ -21,7 +21,7 @@ function detectCollision(A, B) {
 
   // Find C, the vector from the center of the moving
   // circle A to the center of B
-  var C = B.center.minus(A.center);
+  var C = B.center.substract(A.center);
 
   // D = N . C = ||C|| * cos(angle between N and C)
   var D = N.dot(C);
@@ -35,7 +35,7 @@ function detectCollision(A, B) {
   }
 
   // Find the length of the vector C
-  var lengthC = C.magnitude();
+  var lengthC = C.length;
 
   var F = (lengthC * lengthC) - (D * D);
 
@@ -64,7 +64,7 @@ function detectCollision(A, B) {
   var distance = D - Math.sqrt(T);
 
   // Get the magnitude of the movement vector
-  var mag = movevec.magnitude();
+  var mag = movevec.distance;
 
   // Finally, make sure that the distance A has to move
   // to touch B is not greater than the magnitude of the
@@ -75,9 +75,9 @@ function detectCollision(A, B) {
 
   // Set the length of the movevec so that the circles will just
   // touch
-  var tillCollision = N.times(distance);
+  var tillCollision = N.multiply(distance);
 
-  var timeTillCollision = tillCollision.magnitude() / movevec.magnitude();
+  var timeTillCollision = tillCollision.length / movevec.length;
 
   return timeTillCollision;
 }

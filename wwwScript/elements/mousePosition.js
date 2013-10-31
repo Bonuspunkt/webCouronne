@@ -8,7 +8,7 @@ function MousePosition(canvas) {
   }
 
   function isPuckPlacementValid(pos) {
-    return ev.x >= 70 && ev.y <= 230 && ev.y >= 230 && ev.y <= 270;
+    return pos.x >= 70 && pos.y <= 230 && pos.y >= 230 && pos.y <= 270;
   }
 
   var position = { x: 0, y: 0 };

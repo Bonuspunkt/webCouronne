@@ -20,7 +20,7 @@ Ball.prototype.draw = function(context) {
 };
 
 Ball.prototype.update = function(time) {
-  this.center = this.center.add(this.moveVector.times(time));
+  this.center = this.center.add(this.moveVector.multiply(time));
 }
 
 module.exports = Ball;

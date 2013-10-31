@@ -1,5 +1,5 @@
 var game = require('../game');
-var Vector = require('../vector');
+var Vector = require('hna').Vector2;
 
 var table = {
 

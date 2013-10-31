@@ -1,7 +1,7 @@
 var game = require('./game');
 
 var Ball = require('./elements/ball');
-var Vector = require('./vector');
+var Vector = require('hna').Vector2;
 
 var draw = require('./draw');
 

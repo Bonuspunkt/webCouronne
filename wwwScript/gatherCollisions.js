@@ -1,6 +1,7 @@
-var game = require('./game');
 var detectCollision = require('./detectCollision');
 var resolveCollision = require('./resolveCollision');
+
+var Ball = require('./elements/ball');
 
 var Vector = require('hna').Vector2;
 
@@ -18,11 +19,13 @@ function maxCheck(el, xy, max) {
 function getResolver(a, b) {
   return function() {
     resolveCollision(a, b);
-  }
+  };
 }
 
-function gatherCollisions() {
-  var els = game.elements;
+function gatherCollisions(game) {
+  var els = game.components.drawComponents.filter(function(c) {
+    return c instanceof Ball && c.enabled;
+  });
   var collisions = [];
   var i;
 
@@ -45,9 +48,9 @@ function gatherCollisions() {
     var el = els[i];
 
     var collidesLeft = minCheck(el, 'x', 0);
-    var collidesRight = maxCheck(el, 'x', game.canvasEl.width);
+    var collidesRight = maxCheck(el, 'x', game.canvas.width);
     var collidesTop = minCheck(el, 'y', 0);
-    var collidesBottom = maxCheck(el, 'y', game.canvasEl.height);
+    var collidesBottom = maxCheck(el, 'y', game.canvas.height);
 
     collideBorder(collidesLeft, els[i], -1, 1);
     collideBorder(collidesRight, els[i], -1, 1);

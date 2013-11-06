@@ -1,13 +1,8 @@
 require('./polyfill');
 
+var Couronne = require('./couronne');
 var canvasEl = document.querySelector('canvas');
-var context = canvasEl.getContext('2d');
+var couronne = new Couronne(canvasEl);
 
-var game = require('./game');
-game.canvasEl = canvasEl;
-game.context = context;
 
-var hookup = require('./hookup');
-var init = require('./init');
-
-init();
+couronne.init();

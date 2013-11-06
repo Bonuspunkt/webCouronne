@@ -1,23 +1,25 @@
-var game = require('./game');
 var gatherCollisions = require('./gatherCollisions');
-var Vector = require('hna').Vector2;
-var table = require('./elements/table');
+var Vector2 = require('hna').Vector2;
+var Ball = require('./elements/ball');
+
+var STATES = require('./states');
 
 function sort(a,b) {
   return a.time - b.time;
 }
 
-module.exports = function step() {
+module.exports = function step(gameTime) {
+  var game = this;
   // collision detection
   var collisions = [];
-  var interval = 1; // lastRender - currentRender
-  while ((collisions = gatherCollisions()).length > 0 && interval > 0) {
+  var interval = 1;
+  while ((collisions = gatherCollisions(game)).length > 0 && interval > 0) {
 
     collisions.sort(sort);
 
     var collision = collisions[0];
 
-    game.elements.forEach(function(el){
+    game.components.updateComponents.forEach(function(el){
       el.update(collision.time);
     });
     collision.handle();
@@ -26,21 +28,29 @@ module.exports = function step() {
   }
 
   if (interval > 0) {
-    game.elements.forEach(function(el) { el.update(interval); });
+    game.components.updateComponents.forEach(function(el) { el.update(interval); });
   }
-  game.elements.forEach(function(el) {
+  // slowdown
+  game.components.updateComponents.filter(function(cmp) {
+    return cmp instanceof Ball;
+  }).forEach(function(el) {
+    if (!el.moveVector) { return; }
     el.moveVector = el.moveVector.multiply(0.99);
     if (el.moveVector.length < 0.02) {
-      el.moveVector = new Vector(0,0);
+      el.moveVector = new Vector2(0,0);
     }
   });
 
-  table.holes.forEach(function(hole) {
-    game.elements.forEach(function(el, index) {
+  // dead
+  game.table.holes.forEach(function(hole) {
+    game.components.drawComponents.filter(function(cmp) {
+      return cmp instanceof Ball && cmp.enabled;
+    }).forEach(function(el) {
       var distance = hole.substract(el.center).length;
       if (distance < 15) {
-        game.elements.splice(index, 1);
-        game.deadElements.push(el);
+        el.enabled = false;
+        el.moveVector = new Vector2(0,0);
+        el.drawOrder--;
 
         switch (el.color) {
           case '#FF0':
@@ -56,4 +66,14 @@ module.exports = function step() {
       }
     });
   });
+
+  var alive = game.components.drawComponents.some(function(cmp) {
+    return cmp instanceof Ball &&
+      cmp.moveVector.x !== 0 && cmp.moveVector.y !== 0;
+  });
+  if (!alive && this.state === STATES.RUNNING) {
+    this.state = STATES.READY;
+    this.playerBall.center = new Vector2(150, 240);
+    this.playerBall.enabled = true;
+  }
 };

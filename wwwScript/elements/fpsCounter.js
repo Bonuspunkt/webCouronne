@@ -1,30 +1,32 @@
-var fpsCounter = (function() {
-  var COUNT = 30;
-  var stored = new Array(COUNT);
-  var curr = 0;
-  var fps;
+var DrawableGameComponent = require('hna').DrawableGameComponent;
+var util = require('hna').util;
 
-  var lastRender = Date.now();
+var COUNT = 30;
 
-  return {
-    update: function(ticks) {
-      var now = Date.now();
-      var ticks = now - lastRender;
-      lastRender = now;
+function FpsCounter() {
+  DrawableGameComponent.apply(this, arguments);
 
-      stored[curr] = ticks;
-      curr = (curr + 1) % COUNT;
+  this.array = new Array(COUNT);
+  this.index = 0;
+}
 
-      var tickSum = stored.reduce(function(prev, curr) { return prev + curr; });
-      fps = 1000 / (tickSum / COUNT) | 0;
-    },
+util.inherits(FpsCounter, DrawableGameComponent);
 
-    draw: function(context) {
-      context.fillStyle = '#000';
-      context.fillText(fps + 'fps', 10, 20);
-    }
+FpsCounter.prototype.update = function(ticks) {
+  var now = Date.now();
+  var ticks = now - this.lastRender;
+  this.lastRender = now;
 
-  };
-}());
+  this.array[this.index] = ticks;
+  this.index = (this.index + 1) % COUNT;
 
-module.exports = fpsCounter;
+  var tickSum = this.array.reduce(function(prev, curr) { return prev + curr; });
+  this.fps = 1000 / (tickSum / COUNT) | 0;
+};
+
+FpsCounter.prototype.draw = function(context) {
+  context.fillStyle = '#000';
+  context.fillText(this.fps + 'fps', 10, 20);
+};
+
+module.exports = FpsCounter;

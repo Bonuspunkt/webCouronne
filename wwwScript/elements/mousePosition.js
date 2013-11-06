@@ -1,4 +1,10 @@
-function MousePosition(canvas) {
+var DrawableGameComponent = require('hna').DrawableGameComponent;
+var util = require('hna').util;
+
+function MousePosition(game) {
+  DrawableGameComponent.apply(this, arguments);
+
+  var canvas = game.canvas;
 
   function getPosition(e) {
     return {
@@ -11,15 +17,15 @@ function MousePosition(canvas) {
     return pos.x >= 70 && pos.y <= 230 && pos.y >= 230 && pos.y <= 270;
   }
 
-  var position = { x: 0, y: 0 };
+  this.position = { x: 0, y: 0 };
   var bound = canvas.getBoundingClientRect();
   canvas.addEventListener('mousemove', function(e) {
-    position = getPosition(e);
-    if (isPuckPlacementValid(position)) {
+    this.position = getPosition(e);
+    if (isPuckPlacementValid(this.position)) {
       // position puck
       // TODO: requestDraw
     }
-  });
+  }.bind(this));
 
   canvas.addEventListener('mousedown', function() {
     // check if valid to place puck
@@ -31,22 +37,15 @@ function MousePosition(canvas) {
     // TODO: fire puck
   });
 
-  this.update = function(){};
-  this.draw = function(context) {
-      context.fillStyle = '#000';
-      context.fillText('x: ' + position.x, 10, 80);
-      context.fillText('y: ' + position.y, 10, 100);
-  };
 }
 
-/*
-  area
-  70, 230
-  70, 250
-  230, 230
-  230, 250
-*/
+util.inherits(MousePosition, DrawableGameComponent);
 
-module.exports = function(canvas) {
-  return new MousePosition(canvas);
+MousePosition.prototype.draw = function(context) {
+  context.fillStyle = '#000';
+  context.fillText('x: ' + this.position.x, 10, 80);
+  context.fillText('y: ' + this.position.y, 10, 100);
 };
+
+
+module.exports = MousePosition

@@ -1,12 +1,22 @@
-"use strict";
+var DrawableGameComponent = require('hna').DrawableGameComponent;
+var util = require('hna').util;
+var Vector2 = require('hna').Vector2;
+var mixin = require('../util').mixin;
 
-function Ball(center, radius, mass, moveVector, color) {
-  this.center = center;
-  this.radius = radius;
-  this.mass = mass;
-  this.moveVector = moveVector;
-  this.color = color || '#F88';
-};
+function Ball(game, config) {
+  DrawableGameComponent.apply(this, arguments);
+
+  // center, radius, mass, moveVector, color
+  mixin(this, config, {
+    radius: 10,
+    mass: 10,
+    moveVector: new Vector2(0, 0),
+    color: '#F88',
+    drawOrder: 50
+  });
+
+}
+util.inherits(Ball, DrawableGameComponent);
 
 Ball.prototype.draw = function(context) {
   context.beginPath();
@@ -19,8 +29,12 @@ Ball.prototype.draw = function(context) {
   context.closePath();
 };
 
-Ball.prototype.update = function(time) {
-  this.center = this.center.add(this.moveVector.multiply(time));
-}
+Ball.prototype.update = function(gameTime) {
+  if (typeof gameTime === 'number') {
+    gameTime = { elapsed: gameTime };
+  }
+
+  this.center = this.center.add(this.moveVector.multiply(gameTime.elapsed));
+};
 
 module.exports = Ball;

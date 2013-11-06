@@ -1,23 +1,79 @@
-var events = {};
+var ContentManager = require('hna').ContentManager;
+var GameComponentCollection = require('hna').GameComponentCollection;
 
-var game = module.exports = {
-  run: false,
-  elements: [],
-  deadElements: [],
-  on:  function(event, handler) {
-    events[event] = events[event] || [];
-    events[event].push(handler);
-  },
-  un: function(event, handler) {
-    var handlers = events[event] || [];
-    handlers.splice(handlers.indexOf(handler));
-  },
-  fireEvent: function(event) {
-    var args = Array.prototype.slice.call(arguments, 1);
+function GameTime(elapsed, isRunningSlowly, total) {
+  this.elapsed = elapsed;
+  this.isRunningSlowly = isRunningSlowly;
+  this.total = total;
+}
 
-    var handlers = events[event] || [];
-    handlers.forEach(function(handler) {
-      handler.apply(this, args);
-    });
+
+function Game(canvas) {
+  this.canvas = canvas;
+  this.context = canvas.getContext('2d');
+
+  this.components = new GameComponentCollection();
+  this.contentManager = new ContentManager();
+
+  this.tick = this.tick.bind(this);
+}
+
+
+Game.prototype.loadContent = function() {
+  this.components.drawComponents.forEach(function(component) {
+    component.loadContent();
+  });
+};
+
+Game.prototype.draw = function(context) {
+
+  context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+  this.components.drawComponents.forEach(function(component) {
+    if (!component.visible) { return; }
+    component.draw(context);
+  });
+};
+
+Game.prototype.update = function(gameTime) {
+  this.components.updateComponents.forEach(function(component) {
+    if (!component.enabled) { return; }
+    component.update(gameTime);
+  });
+};
+
+Game.prototype.tick = function() {
+  var now = Date.now();
+  this.gameTime.elapsedGameTime = now - this.lastDraw;
+  this.gameTime.totalGameTime = now - this.startGame;
+  this.gameTime.isRunningSlowly = this.gameTime.elapsedGameTime > 17;
+
+  this.update(this.gameTime);
+  this.draw(this.context);
+
+  requestAnimationFrame(this.tick);
+};
+
+
+Game.prototype.init = function() {
+
+  var onDone = function() {
+    var now = Date.now();
+    this.startGame = now;
+    this.lastDraw = now;
+
+    this.gameTime = new GameTime(0, false, 0);
+
+    this.tick();
+  }.bind(this);
+
+  this.contentManager.on('done', onDone);
+
+  this.loadContent();
+
+  if (this.contentManager.done) {
+    onDone();
   }
 };
+
+module.exports = Game;

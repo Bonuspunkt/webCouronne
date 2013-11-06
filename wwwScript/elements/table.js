@@ -12,6 +12,8 @@ function Table(game) {
     new Vector( 40,260),
     new Vector(260,260)
   ];
+
+  this.drawOrder = 5;
 }
 
 util.inherits(Table, DrawableGameComponent);

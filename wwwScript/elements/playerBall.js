@@ -29,7 +29,13 @@ PlayerBall.prototype.getPosition = function(e) {
 };
 
 PlayerBall.prototype.isPuckPlacementValid = function(pos) {
-  return pos.x >= 70 && pos.x <= 230 && pos.y >= 230 && pos.y <= 250;
+  var self = this;
+
+  return pos.x >= 70 && pos.x <= 230 && pos.y >= 230 && pos.y <= 250 &&
+    !this.game.components.updateComponents.some(function(cmp) {
+      return cmp instanceof Ball && self !== cmp &&
+        cmp.center.substract(self.center).length < 2 * self.radius;
+    });
 };
 
 PlayerBall.prototype.onMouseMove = function(e) {
@@ -85,5 +91,15 @@ PlayerBall.prototype.draw = function(context) {
     context.closePath();
   }
 };
+
+PlayerBall.prototype.reset = function() {
+  mixin(this, {
+    center: new Vector2(150,240),
+    moveVector: new Vector2(0,0),
+    drawOrder: 100,
+    enabled: true,
+    color: '#FF0'
+  });
+}
 
 module.exports = PlayerBall;

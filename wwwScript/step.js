@@ -49,7 +49,6 @@ module.exports = function step(gameTime) {
       var distance = hole.substract(el.center).length;
       if (distance < 15) {
         el.enabled = false;
-        el.moveVector = new Vector2(0,0);
         el.drawOrder--;
 
         switch (el.color) {
@@ -68,12 +67,11 @@ module.exports = function step(gameTime) {
   });
 
   var alive = game.components.drawComponents.some(function(cmp) {
-    return cmp instanceof Ball &&
+    return cmp instanceof Ball && cmp.enabled &&
       cmp.moveVector.x !== 0 && cmp.moveVector.y !== 0;
   });
   if (!alive && this.state === STATES.RUNNING) {
     this.state = STATES.READY;
-    this.playerBall.center = new Vector2(150, 240);
-    this.playerBall.enabled = true;
+    this.playerBall.reset();
   }
 };

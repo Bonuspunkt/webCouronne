@@ -68,7 +68,7 @@ module.exports = function step(gameTime) {
 
   var alive = game.components.drawComponents.some(function(cmp) {
     return cmp instanceof Ball && cmp.enabled &&
-      cmp.moveVector.x !== 0 && cmp.moveVector.y !== 0;
+      (cmp.moveVector.x !== 0 || cmp.moveVector.y !== 0);
   });
   if (!alive && this.state === STATES.RUNNING) {
     this.state = STATES.READY;

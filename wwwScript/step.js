@@ -35,9 +35,9 @@ module.exports = function step(gameTime) {
     return cmp instanceof Ball;
   }).forEach(function(el) {
     if (!el.moveVector) { return; }
-    el.moveVector = el.moveVector.multiply(0.99);
-    if (el.moveVector.length < 0.02) {
-      el.moveVector = new Vector2(0,0);
+    el.moveVector = el.moveVector.multiply(0.985);
+    if (el.moveVector.length() < 0.02) {
+      el.moveVector = Vector2.zero;
     }
   });
 
@@ -46,32 +46,21 @@ module.exports = function step(gameTime) {
     game.components.drawComponents.filter(function(cmp) {
       return cmp instanceof Ball && cmp.enabled;
     }).forEach(function(el) {
-      var distance = hole.substract(el.center).length;
+      var distance = hole.distance(el.center);
       if (distance < 15) {
-        el.enabled = false;
-        el.drawOrder--;
-
-        switch (el.color) {
-          case '#FF0':
-            el.color = '#880';
-            break;
-          case '#F22':
-            el.color = '#800';
-            break;
-          case '#2F2':
-            el.color = '#080';
-            break;
-        }
+        el.die();
       }
     });
   });
 
   var alive = game.components.drawComponents.some(function(cmp) {
     return cmp instanceof Ball && cmp.enabled &&
-      (cmp.moveVector.x !== 0 || cmp.moveVector.y !== 0);
+      !cmp.moveVector.equals(Vector2.zero);
   });
   if (!alive && this.state === STATES.RUNNING) {
     this.state = STATES.READY;
     this.playerBall.reset();
+    // analyse dead collection
+    // clear dead collection
   }
 };

@@ -5,10 +5,10 @@ function detectCollision(A, B) {
   // Early Escape test: if the length of the movevec is less
   // than distance between the centers of these circles minus
   // their radii, there's no way they can hit.
-  var dist = B.center.substract(A.center).length;
+  var dist = B.center.distance(A.center);
   var sumRadii = (B.radius + A.radius);
   dist -= sumRadii;
-  if (movevec.length < dist){
+  if (movevec.length() < dist){
     return false;
   }
 
@@ -35,7 +35,7 @@ function detectCollision(A, B) {
   }
 
   // Find the length of the vector C
-  var lengthC = C.length;
+  var lengthC = C.length();
 
   var F = (lengthC * lengthC) - (D * D);
 
@@ -77,7 +77,7 @@ function detectCollision(A, B) {
   // touch
   var tillCollision = N.multiply(distance);
 
-  var timeTillCollision = tillCollision.length / movevec.length;
+  var timeTillCollision = tillCollision.length() / movevec.length();
 
   return timeTillCollision;
 }

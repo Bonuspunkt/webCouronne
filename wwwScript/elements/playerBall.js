@@ -24,6 +24,19 @@ function PlayerBall(game, config) {
 }
 util.inherits(PlayerBall, Ball);
 
+Object.defineProperty(PlayerBall.prototype, 'lineEnd', {
+  get: function() { return this._lineEnd; },
+  set: function(value) {
+    var oldValue = this._lineEnd;
+    this._lineEnd = value;
+
+    if (value instanceof Vector2 && oldValue instanceof Vector2 &&
+        (value.x | 0) === (oldValue.x | 0) &&
+        (value.y | 0) === (oldValue.y | 0)) { return; }
+    this.fireEvent('requireRedraw');
+  }
+});
+
 PlayerBall.prototype.getPosition = function(e) {
   return new Vector2(e.pageX - this.bound.left, e.pageY - this.bound.top);
 };
@@ -34,7 +47,7 @@ PlayerBall.prototype.isPuckPlacementValid = function(pos) {
   return pos.x >= 70 && pos.x <= 230 && pos.y >= 230 && pos.y <= 250 &&
     !this.game.components.updateComponents.some(function(cmp) {
       return cmp instanceof Ball && self !== cmp &&
-        cmp.center.substract(self.center).length < 2 * self.radius;
+        cmp.center.substract(self.center).length() < 2 * self.radius;
     });
 };
 
@@ -83,6 +96,11 @@ PlayerBall.prototype.draw = function(context) {
     context.lineWidth = 2;
     context.strokeStyle = '#f00';
 
+    // TODO: check valid & boundaries
+    // y must be positive
+    // max force = 10
+    // offset = 0
+
     var offset = this.lineEnd.substract(this.center).normalize().multiply(12);
     var start = this.center.add(offset);
     context.moveTo(start.x, start.y);
@@ -100,6 +118,11 @@ PlayerBall.prototype.reset = function() {
     enabled: true,
     color: '#FF0'
   });
-}
+};
+
+PlayerBall.prototype.die = function() {
+  Ball.prototype.die.apply(this, arguments);
+  this.color = '#880';
+};
 
 module.exports = PlayerBall;

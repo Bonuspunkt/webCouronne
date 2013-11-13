@@ -52,6 +52,13 @@ PlayerBall.prototype.isPuckPlacementValid = function(pos) {
     });
 };
 
+PlayerBall.prototype.isShotValid = function() {
+  var moveVector = this.center.substract(this.lineEnd);
+  if (moveVector.y > 0) return false;
+  if (moveVector.length() <= 12) return false;
+  return true;
+};
+
 PlayerBall.prototype.onMouseMove = function(e) {
   var pos = this.getPosition(e);
 
@@ -79,9 +86,18 @@ PlayerBall.prototype.onMouseDown = function(e) {
 
 PlayerBall.prototype.onMouseUp = function(e) {
   if (this.game.state !== STATES.STEADY) { return; }
+  if (!this.isShotValid()) {
+    this.game.state = STATES.READY;
+    return;
+  }
   this.game.state = STATES.RUNNING;
 
-  this.moveVector = this.center.substract(this.lineEnd).multiply(0.2);
+  var moveVector = this.center.substract(this.lineEnd);
+  moveVector = moveVector.substract(moveVector.normalize().multiply(12));
+  if (moveVector.length() > 30) {
+    moveVector = moveVector.normalize().multiply(30);
+  }
+  this.moveVector = moveVector.multiply(0.3);
 };
 
 PlayerBall.prototype.getColor = function() {
@@ -95,19 +111,21 @@ PlayerBall.prototype.draw = function(context) {
   Ball.prototype.draw.apply(this, arguments);
 
   if (this.game.state === STATES.STEADY) {
+    if (this.center.equals(this.lineEnd)) { return; }
+
     context.beginPath();
     context.lineWidth = 2;
-    context.strokeStyle = '#f00';
-
-    // TODO: check valid & boundaries
-    // y must be positive
-    // max force = 10
-    // offset = 0
+    context.strokeStyle = this.isShotValid() ? '#f00' : '#888';
 
     var offset = this.lineEnd.substract(this.center).normalize().multiply(12);
     var start = this.center.add(offset);
     context.moveTo(start.x, start.y);
-    context.lineTo(this.lineEnd.x, this.lineEnd.y);
+
+    var shotVector = this.lineEnd.substract(start);
+    if (shotVector.length() > 30) {
+      shotVector = shotVector.normalize().multiply(30);
+    }
+    context.lineTo(start.x + shotVector.x, start.y + shotVector.y);
     context.stroke();
     context.closePath();
   }

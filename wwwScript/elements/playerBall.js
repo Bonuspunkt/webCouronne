@@ -140,9 +140,4 @@ PlayerBall.prototype.reset = function() {
   });
 };
 
-PlayerBall.prototype.die = function() {
-  Ball.prototype.die.apply(this, arguments);
-  this.color = '#880';
-};
-
 module.exports = PlayerBall;

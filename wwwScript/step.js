@@ -48,7 +48,8 @@ module.exports = function step(gameTime) {
     }).forEach(function(el) {
       var distance = hole.distance(el.center);
       if (distance < 15) {
-        el.die();
+        el.enabled = false;
+        game.deadCollection.push(el);
       }
     });
   });

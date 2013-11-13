@@ -56,8 +56,4 @@ Ball.prototype.update = function(gameTime) {
   this.center = this.center.add(this.moveVector.multiply(gameTime.elapsed));
 };
 
-Ball.prototype.die = function() {
-  this.enabled = false;
-};
-
 module.exports = Ball;

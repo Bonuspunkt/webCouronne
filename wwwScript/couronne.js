@@ -12,6 +12,23 @@ var PlayerBall = require('./elements/playerBall');
 var step = require('./step');
 var STATES = require('./states');
 
+// initPositions
+var positions = [];
+positions.push(new Vector2(150, 150));
+for (i = 0; i < 6; i++) {
+  positions.push(new Vector2(
+    150 + 22 * Math.sin(2 * Math.PI * i / 6),
+    150 + 22 * Math.cos(2 * Math.PI * i / 6)
+  ));
+}
+for (i = 0; i < 13; i++) {
+  positions.push(new Vector2(
+    150 + 44 * Math.sin(2 * Math.PI * i / 13),
+    150 + 44 * Math.cos(2 * Math.PI * i / 13)
+  ));
+}
+
+
 function Couronne(canvas) {
   Game.apply(this, arguments);
 
@@ -21,37 +38,21 @@ function Couronne(canvas) {
   this.components.add(new FpsCounter(this));
   this.components.add(new MousePosition(this));
 
-  this.components.add(
-    new Ball(this, {
-      center: new Vector2(150, 150),
-      color: '#2F2'
-    })
-  );
-
-  var i;
-  for (i = 0; i < 6; i++) {
-    this.components.add(
-      new Ball(this, {
-        center: new Vector2(
-          150 + 22 * Math.sin(2 * Math.PI * i / 6),
-          150 + 22 * Math.cos(2 * Math.PI * i / 6)
-        ),
-        color: (i % 2 ? '#F22' : '#2F2')
-      })
-    );
+  var greens = [];
+  while (greens.length < 10) {
+    var index = (Math.random() * 20) | 0;
+    if (greens.indexOf(index) === -1) { greens.push(index); }
   }
 
-  for (i = 0; i < 13; i++) {
+  positions.forEach(function(pos, index) {
     this.components.add(
       new Ball(this, {
-        center: new Vector2(
-          150 + 44 * Math.sin(2 * Math.PI * i / 13),
-          150 + 44 * Math.cos(2 * Math.PI * i / 13)
-        ),
-        color: (i % 2 ? '#2F2' : '#F22')
+        center: pos,
+        player: greens.indexOf(index) !== -1 ? 1 : 2,
+        updateOrder: 10 + index
       })
     );
-  }
+  }, this);
 
   this.playerBall = new PlayerBall(this, {});
   this.components.add(this.playerBall);

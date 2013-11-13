@@ -9,7 +9,7 @@ function PlayerBall(game, config) {
 
   mixin(config, {
     center: new Vector2(150,240),
-    color: '#ffe',
+    player: 0,
     drawOrder: 100
   });
 
@@ -43,6 +43,7 @@ PlayerBall.prototype.getPosition = function(e) {
 
 PlayerBall.prototype.isPuckPlacementValid = function(pos) {
   var self = this;
+  pos = pos || this.center;
 
   return pos.x >= 70 && pos.x <= 230 && pos.y >= 230 && pos.y <= 250 &&
     !this.game.components.updateComponents.some(function(cmp) {
@@ -57,11 +58,6 @@ PlayerBall.prototype.onMouseMove = function(e) {
   switch (this.game.state) {
     case STATES.READY:
       this.center = pos;
-      if (this.isPuckPlacementValid(this.center)) {
-        this.color = '#FF0';
-      } else {
-        this.color = '#FFB';
-      }
       break;
 
     case STATES.STEADY:
@@ -86,6 +82,13 @@ PlayerBall.prototype.onMouseUp = function(e) {
   this.game.state = STATES.RUNNING;
 
   this.moveVector = this.center.substract(this.lineEnd).multiply(0.2);
+};
+
+PlayerBall.prototype.getColor = function() {
+  if (this.game.state === STATES.READY && !this.isPuckPlacementValid()) {
+    return '#FFB';
+  }
+  return this.enabled ? '#FF0' : '#880'
 };
 
 PlayerBall.prototype.draw = function(context) {
@@ -115,8 +118,7 @@ PlayerBall.prototype.reset = function() {
     center: new Vector2(150,240),
     moveVector: new Vector2(0,0),
     drawOrder: 100,
-    enabled: true,
-    color: '#FF0'
+    enabled: true
   });
 };
 

@@ -10,7 +10,7 @@ function Ball(game, config) {
     radius: 10,
     mass: 10,
     moveVector: new Vector2(0, 0),
-    color: '#F88',
+    player: 1,
     drawOrder: 50
   });
 
@@ -30,25 +30,22 @@ Object.defineProperty(Ball.prototype, 'center', {
   }
 });
 
-Object.defineProperty(Ball.prototype, 'color', {
-  get: function() { return this._color; },
-  set: function(value) {
-    var oldValue = this._color;
-    if (value === oldValue) { return; }
-    this._color = value;
-    this.fireEvent('requireRedraw');
-  }
-});
-
 Ball.prototype.draw = function(context) {
   context.beginPath();
   context.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI, false);
-  context.fillStyle = this.color;
+  context.fillStyle = this.getColor();
   context.fill();
   context.lineWidth = 1;
   context.strokeStyle = '#000';
   context.stroke();
   context.closePath();
+};
+
+Ball.prototype.getColor = function() {
+  if (this.player === 1)
+    return this.enabled ? '#2F2' : '#080';
+  if (this.player === 2)
+    return this.enabled ? '#F22' : '#800'
 };
 
 Ball.prototype.update = function(gameTime) {
@@ -61,13 +58,6 @@ Ball.prototype.update = function(gameTime) {
 
 Ball.prototype.die = function() {
   this.enabled = false;
-
-  if (this.color === '#2F2') {
-    this.color = '#080';
-  }
-  else if (this.color === '#F22') {
-    this.color = '#800';
-  }
 };
 
 module.exports = Ball;

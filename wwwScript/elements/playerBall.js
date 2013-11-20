@@ -90,7 +90,6 @@ PlayerBall.prototype.onMouseUp = function(e) {
     this.game.state = STATES.READY;
     return;
   }
-  this.game.state = STATES.RUNNING;
 
   var moveVector = this.center.substract(this.lineEnd);
   moveVector = moveVector.substract(moveVector.normalize().multiply(12));
@@ -98,6 +97,7 @@ PlayerBall.prototype.onMouseUp = function(e) {
     moveVector = moveVector.normalize().multiply(30);
   }
   this.moveVector = moveVector.multiply(0.3);
+  this.game.state = STATES.RUNNING;
 };
 
 PlayerBall.prototype.getColor = function() {

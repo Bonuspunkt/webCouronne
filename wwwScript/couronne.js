@@ -4,13 +4,12 @@ var util = require('hna').util;
 
 var Grid = require('./elements/grid');
 var Table = require('./elements/table');
-var FpsCounter = require('./elements/fpsCounter');
-var MousePosition = require('./elements/mousePosition');
 var Ball = require('./elements/ball');
 var PlayerBall = require('./elements/playerBall');
 
 var step = require('./step');
 var STATES = require('./states');
+
 
 // initPositions
 var positions = [];
@@ -28,15 +27,35 @@ for (i = 0; i < 13; i++) {
   ));
 }
 
+var flatRequestAnimationFrame = (function() {
+  var alreadyQueued = false;
+  return function(fn) {
+    if (alreadyQueued) { return; }
+    alreadyQueued = true;
+    requestAnimationFrame(function() {
+      alreadyQueued = false;
+      fn();
+    });
+  };
+}());
 
 function Couronne(canvas) {
   Game.apply(this, arguments);
 
+  var _this = this;
+
+  this.components.on('componentAdd', function(cmp) {
+    cmp.on('requireRedraw', function() {
+      flatRequestAnimationFrame(function() { _this.tick(); });
+    });
+    cmp.on('requireUpdate', function() {
+      flatRequestAnimationFrame(function() { _this.tick(); });
+    });
+  });
+
   this.components.add(new Grid(this));
   this.table = new Table(this);
   this.components.add(this.table);
-  this.components.add(new FpsCounter(this));
-  this.components.add(new MousePosition(this));
 
   var greens = [];
   while (greens.length < 10) {
@@ -44,17 +63,20 @@ function Couronne(canvas) {
     if (greens.indexOf(index) === -1) { greens.push(index); }
   }
 
+  this.balls = [];
   positions.forEach(function(pos, index) {
-    this.components.add(
-      new Ball(this, {
-        center: pos,
-        player: greens.indexOf(index) !== -1 ? 1 : 2,
-        updateOrder: 10 + index
-      })
-    );
+    var ball = new Ball(this, {
+      center: pos,
+      player: greens.indexOf(index) !== -1 ? 1 : 2,
+      updateOrder: 10 + index
+    });
+
+    this.components.add(ball);
+    this.balls.push(ball);
   }, this);
 
   this.playerBall = new PlayerBall(this, {});
+  this.balls.push(this.playerBall);
   this.components.add(this.playerBall);
 
   this.state = STATES.READY;
@@ -62,16 +84,22 @@ function Couronne(canvas) {
 
 util.inherits(Couronne, Game);
 
-Couronne.prototype.update = step;
+Couronne.prototype.tick = function(){
+  var now = Date.now();
+  this.gameTime.elapsedGameTime = now - this.lastDraw;
+  this.gameTime.totalGameTime = now - this.startGame;
+  this.gameTime.isRunningSlowly = this.gameTime.elapsedGameTime > 17;
 
-Object.defineProperty(Couronne.prototype, 'state', {
-  set: function(value) {
-    console.log('state changed to:', value);
-    this._state = value;
-  },
-  get: function() {
-    return this._state;
-  }
-})
+  this.update(this.gameTime);
+  this.draw(this.context);
+};
+
+Couronne.prototype.update = function() {
+  step.apply(this, arguments);
+
+};
+
+
+util.autoEventedProperty(Couronne.prototype, 'state');
 
 module.exports = Couronne;

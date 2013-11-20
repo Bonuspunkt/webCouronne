@@ -10,6 +10,9 @@ function sort(a,b) {
 
 module.exports = function step(gameTime) {
   var game = this;
+
+  if (game.state !== STATES.RUNNING) { return; }
+
   // collision detection
   var collisions = [];
   var interval = 1;

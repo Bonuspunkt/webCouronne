@@ -1,5 +1,7 @@
+var EventEmitter = require('hna').EventEmitter;
 var ContentManager = require('hna').ContentManager;
 var GameComponentCollection = require('hna').GameComponentCollection;
+var util = require('hna').util;
 
 function GameTime(elapsed, isRunningSlowly, total) {
   this.elapsed = elapsed;
@@ -9,6 +11,8 @@ function GameTime(elapsed, isRunningSlowly, total) {
 
 
 function Game(canvas) {
+  EventEmitter.apply(this);
+
   this.canvas = canvas;
   this.context = canvas.getContext('2d');
 
@@ -17,6 +21,8 @@ function Game(canvas) {
 
   this.tick = this.tick.bind(this);
 }
+
+util.inherits(Game, EventEmitter);
 
 
 Game.prototype.loadContent = function() {

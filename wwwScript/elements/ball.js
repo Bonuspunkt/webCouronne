@@ -17,16 +17,29 @@ function Ball(game, config) {
 }
 util.inherits(Ball, DrawableGameComponent);
 
-Object.defineProperty(Ball.prototype, 'center', {
-  get: function() { return this._center; },
-  set: function(value) {
-    var oldValue = this._center;
-    this._center = value;
+Object.defineProperties(Ball.prototype, {
+  center: {
+    get: function() { return this._center; },
+    set: function(value) {
+      var oldValue = this._center;
+      this._center = value;
 
-    if (value instanceof Vector2 && oldValue instanceof Vector2 &&
-        (value.x | 0) === (oldValue.x | 0) &&
-        (value.y | 0) === (oldValue.y | 0)) { return; }
-    this.fireEvent('requireRedraw');
+      if (value instanceof Vector2 && oldValue instanceof Vector2 &&
+          (value.x | 0) === (oldValue.x | 0) &&
+          (value.y | 0) === (oldValue.y | 0)) { return; }
+      this.fireEvent('requireRedraw');
+    }
+  },
+  moveVector: {
+    get: function() { return this._moveVector; },
+    set: function(value) {
+      var oldValue = this._moveVector;
+      this._moveVector = value;
+
+      if (value instanceof Vector2 && oldValue instanceof Vector2 &&
+          oldValue.equals(value)) { return; }
+      this.fireEvent('requireUpdate');
+    }
   }
 });
 

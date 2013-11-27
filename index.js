@@ -4,6 +4,8 @@ var send = require('send');
 var url = require('url');
 var webmake = require('webmake');
 
+var UserState = require('./lib/userState');
+
 var wwwRoot = path.resolve(__dirname, 'wwwRoot');
 
 var wwwScriptRoot = path.resolve(__dirname, 'wwwScript', 'main.js');
@@ -27,17 +29,20 @@ module.exports = {
       return;
     }
 
+    if (req.url.indexOf('/c/') === 0) {
+      req.url = '/';
+    }
+
     send(req, url.parse(req.url).pathname)
       .root(wwwRoot)
       .pipe(res);
   },
 
   upgrade: function(helper) {
-    //helper.request decisoins?
+    var url = helper.request.url;
     var webSocket = helper.accept();
-    // TODO: launch
-    webSocket.on('message', function(message) {
-      console.log('wsIN', message);
-    });
+
+    // todo: userState.create()
+    new UserState(webSocket, url);
   }
 };

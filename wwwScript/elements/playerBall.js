@@ -10,7 +10,7 @@ function PlayerBall(game, config) {
   mixin(config, {
     center: new Vector2(150,240),
     player: 0,
-    drawOrder: 100
+    drawOrder: 1500
   });
 
   Ball.apply(this, arguments);

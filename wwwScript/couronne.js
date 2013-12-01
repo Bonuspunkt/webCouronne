@@ -1,5 +1,6 @@
 var Game = require('./game');
 var util = require('hna').util;
+var Vector2 = require('hna').Vector2;
 
 var Grid = require('./elements/grid');
 var Table = require('./elements/table');
@@ -47,7 +48,7 @@ function Couronne(canvas) {
     var ball = new Ball(this, {
       center: pos,
       player: pos.player,
-      drawOrder: 100 + index
+      drawOrder: 1000 + index
     });
 
     this.components.add(ball);
@@ -62,6 +63,7 @@ function Couronne(canvas) {
 
 
   this.deadCollection = [];
+  this.activePlayer = 1;
 }
 
 util.inherits(Couronne, Game);
@@ -78,9 +80,30 @@ Couronne.prototype.tick = function(){
 
 Couronne.prototype.update = function() {
   step.apply(this, arguments);
-
 };
 
+Couronne.prototype.markDeadPucks = function() {
+  var game = this;
+  game.table.holes.forEach(function(hole) {
+    game.components.drawComponents.filter(function(cmp) {
+      return cmp instanceof Ball && cmp.enabled;
+    }).forEach(function(el) {
+      var distance = hole.distance(el.center);
+      if (distance < 15) {
+        el.enabled = false;
+        game.deadCollection.push(el);
+      }
+    });
+  });
+};
+
+Couronne.prototype.isDone = function() {
+  var alive = this.components.drawComponents.some(function(cmp) {
+    return cmp instanceof Ball && cmp.enabled &&
+      !cmp.moveVector.equals(Vector2.zero);
+  });
+  return !alive;
+};
 
 util.autoEventedProperty(Couronne.prototype, 'state');
 

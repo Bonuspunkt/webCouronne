@@ -16,5 +16,8 @@ socket.addEventListener('close', function() {
 
 require('./webSocket/logonWebSocket')(socket);
 
-require('./webSocket/couronneWebSocket')(couronne, socket);
+var Channel = require('./webSocket/channel');
+var channel = new Channel(socket);
+
+require('./webSocket/couronneWebSocket')(couronne, channel);
 

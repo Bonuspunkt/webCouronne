@@ -45,25 +45,40 @@ module.exports = function step(gameTime) {
   });
 
   // dead
-  game.table.holes.forEach(function(hole) {
-    game.components.drawComponents.filter(function(cmp) {
-      return cmp instanceof Ball && cmp.enabled;
-    }).forEach(function(el) {
-      var distance = hole.distance(el.center);
-      if (distance < 15) {
-        el.enabled = false;
-      }
-    });
-  });
+  game.markDeadPucks();
 
-  var alive = game.components.drawComponents.some(function(cmp) {
-    return cmp instanceof Ball && cmp.enabled &&
-      !cmp.moveVector.equals(Vector2.zero);
-  });
-  if (!alive && this.state === STATES.RUNNING) {
+  if (game.isDone() &&
+      this.state === STATES.RUNNING) {
+
+    // analyse dead collection
+    if (game.deadCollection.indexOf(game.playerBall) !== -1) {
+      var playerBall = game.balls.filter(function(ball) {
+        return !ball.enabled && ball.player === game.activePlayer;
+      })[0];
+      if (playerBall) {
+        playerBall.enabled = true;
+        // TODO: circle through initial positions and find an not occupied place
+        var positions = require('./getPositions')();
+        var positionValid = false;
+        for (var i = 0; i < positions.length || positionValid; i++) {
+          positionValid = this.balls.every(function(ball) {
+            return playerBall !== ball &&
+              ball.center.distance(positions[i]) > 10;
+          })
+        }
+        playerBall.center = new Vector2(positions[i-1].x, positions[i-1].y);
+      }
+    }
+    else if (!this.deadCollection[0] ||
+      this.deadCollection[0].player !== game.player) {
+      game.player = game.player === 1 ? 2 : 1;
+    }
+
+    // reset stuff
     this.state = STATES.READY;
     this.playerBall.reset();
-    // analyse dead collection
-    // clear dead collection
+    game.deadCollection = [];
+
+
   }
 };

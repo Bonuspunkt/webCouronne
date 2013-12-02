@@ -4,4 +4,28 @@ label, input {
 
 canvas {
   border: 1px solid #111;
+  cursor: crosshair;
+}
+
+canvas, #playerlist, #chatbox, form {
+  border: 1px solid #111;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#playerlist, #chatbox, form {
+  width: 300px;
+  height: 300px;
+}
+
+#playerlist > *, #chatbox > * {
+  margin: 5px;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  display: block;
 }

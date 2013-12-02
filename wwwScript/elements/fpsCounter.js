@@ -8,6 +8,8 @@ function FpsCounter() {
 
   this.array = new Array(COUNT);
   this.index = 0;
+
+  this.drawOrder = 1e3;
 }
 
 util.inherits(FpsCounter, DrawableGameComponent);
@@ -27,6 +29,8 @@ FpsCounter.prototype.update = function(ticks) {
 FpsCounter.prototype.draw = function(context) {
   context.fillStyle = '#000';
   context.fillText(this.fps + 'fps', 10, 20);
+
+  context.fillText(this.game.state, 10, 35);
 };
 
 module.exports = FpsCounter;

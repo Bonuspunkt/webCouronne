@@ -50,7 +50,7 @@ function Channel(socket) {
   }.bind(this));
 
   this.send = function(object) {
-    if(!this.active) { return; }
+    if (!this.active && !object.msg) { return; }
 
     if (object.gameState) {
       if (object.gameState.puck &&

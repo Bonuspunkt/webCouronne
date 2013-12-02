@@ -4,6 +4,8 @@ var util = require('hna').util;
 function MousePosition(game) {
   DrawableGameComponent.apply(this, arguments);
 
+  this.drawOrder = 1e3;
+
   var canvas = game.canvas;
 
   function getPosition(e) {
@@ -43,8 +45,8 @@ util.inherits(MousePosition, DrawableGameComponent);
 
 MousePosition.prototype.draw = function(context) {
   context.fillStyle = '#000';
-  context.fillText('x: ' + this.position.x, 10, 80);
-  context.fillText('y: ' + this.position.y, 10, 100);
+  context.fillText('x: ' + (this.position.x | 0), 10, 80);
+  context.fillText('y: ' + (this.position.y | 0), 10, 100);
 };
 
 

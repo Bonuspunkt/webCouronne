@@ -29,3 +29,14 @@ ul {
 li {
   display: block;
 }
+
+input {
+  display: inline-block;
+}
+
+.join {
+  color: #161;
+}
+.part {
+  color: #611;
+}

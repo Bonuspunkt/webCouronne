@@ -18,12 +18,14 @@ module.exports = function(chatBox, channel) {
     li.className = 'join';
     li.textContent = name + ' joined';
     historyEl.appendChild(li);
+    chatBox.scrollTop = chatBox.scrollHeight;
   });
 
   channel.on('msg', function(name, msg) {
     li = document.createElement('li');
     li.textContent = name + ': ' + msg;
     historyEl.appendChild(li);
+    chatBox.scrollTop = chatBox.scrollHeight;
   });
 
   channel.on('part', function(name) {
@@ -31,6 +33,7 @@ module.exports = function(chatBox, channel) {
     li.className = 'part';
     li.textContent = name + ' parted';
     historyEl.appendChild(li);
+    chatBox.scrollTop = chatBox.scrollHeight;
   });
 
 };

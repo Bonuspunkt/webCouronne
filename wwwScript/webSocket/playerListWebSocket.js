@@ -49,10 +49,8 @@ module.exports = function(playerList, channel) {
     rebuildUserList();
   });
 
-  channel.on('gameState', function(gameState) {
-    if (gameState.player) {
-      player = gameState.player;
-    }
+  channel.on('activePlayer', function(activePlayer) {
+    player = activePlayer;
     rebuildUserList();
   })
 };

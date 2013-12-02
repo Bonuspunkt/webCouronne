@@ -244,3 +244,23 @@ test('gameState player two', function(assert) {
 
   assert.end();
 });
+
+test('gameState should emit activePlayer', function(assert) {
+
+  assert.plan(2);
+
+  var webSocket = new EventEmitter();
+  webSocket.send = function(){};
+  var channel = new Channel(webSocket);
+  channel.on('activePlayer', function(player) {
+    assert.equal(player, 1);
+  });
+
+  webSocket.emit('message', {
+    data: JSON.stringify({ gameState: { player: 1 } })
+  });
+  channel.active = true;
+  channel.send({ gameState: { player: 1 } });
+
+  assert.end();
+})

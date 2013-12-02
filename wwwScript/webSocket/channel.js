@@ -45,6 +45,10 @@ function Channel(socket) {
     }
     else if (data.gameState) {
       this.onGameState(data);
+
+      if (data.gameState.player) {
+        this.emit('activePlayer', data.gameState.player);
+      }
     }
 
   }.bind(this));
@@ -53,8 +57,9 @@ function Channel(socket) {
     if (!this.active && !object.msg) { return; }
 
     if (object.gameState) {
-      if (object.gameState.puck &&
-          object.gameState.puck.x === null) { debugger; }
+      if (object.gameState.player) {
+        this.emit('activePlayer', object.gameState.player);
+      }
       object.gameState = this.transformGameState(object.gameState);
     }
 

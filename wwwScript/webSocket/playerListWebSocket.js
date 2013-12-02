@@ -9,7 +9,9 @@ module.exports = function(playerList, channel) {
     playerListEl.innerHTML = '';
     users.forEach(function(user) {
       var userEl = document.createElement('li');
-      userEl.textContent = '[' + user.player + '] ' + user.name;
+      userEl.textContent = '[' +
+        (user.player === 0 ? 'SPEC' : user.player) +
+        '] ' + user.name;
       if (user.player === player) {
         userEl.style.background = '#8f8';
       }

@@ -3,6 +3,7 @@ var Vector2 = require('hna').Vector2;
 var Ball = require('./elements/ball');
 
 var STATES = require('./states');
+var RESULTS = require('./results');
 
 function sort(a,b) {
   return a.time - b.time;
@@ -50,35 +51,24 @@ module.exports = function step(gameTime) {
   if (game.isDone() &&
       this.state === STATES.RUNNING) {
 
+    var result;
     // analyse dead collection
     if (game.deadCollection.indexOf(game.playerBall) !== -1) {
-      var playerBall = game.balls.filter(function(ball) {
-        return !ball.enabled && ball.player === game.activePlayer;
-      })[0];
-      if (playerBall) {
-        playerBall.enabled = true;
-        // TODO: circle through initial positions and find an not occupied place
-        var positions = require('./getPositions')();
-        var positionValid = false;
-        for (var i = 0; i < positions.length || positionValid; i++) {
-          positionValid = this.balls.every(function(ball) {
-            return playerBall !== ball &&
-              ball.center.distance(positions[i]) > 10;
-          })
-        }
-        playerBall.center = new Vector2(positions[i-1].x, positions[i-1].y);
-      }
+      result = RESULTS.FAILED;
     }
     else if (!this.deadCollection[0] ||
-      this.deadCollection[0].player !== game.player) {
-      game.player = game.player === 1 ? 2 : 1;
+        this.deadCollection[0].player !== game.activePlayer) {
+      result = RESULTS.FINISHED;
+    } else {
+      result = RESULTS.CONTINUE;
     }
 
+    this.playerBall.enabled = true;
+
+    this.emit('finished', result);
+
     // reset stuff
-    this.state = STATES.READY;
-    this.playerBall.reset();
+    //this.state = STATES.READY;
     game.deadCollection = [];
-
-
   }
 };

@@ -1,6 +1,6 @@
 var Vector2 = require('hna').Vector2;
 
-module.exports = function() {
+module.exports = function(includePlayerInfo) {
   var i;
   var positions = [];
   positions.push(new Vector2(150, 150));
@@ -18,15 +18,17 @@ module.exports = function() {
     ));
   }
 
-  var greens = [];
-  while (greens.length < 10) {
-    var index = (Math.random() * 20) | 0;
-    if (greens.indexOf(index) === -1) { greens.push(index); }
-  }
+  if (includePlayerInfo === undefined || includePlayerInfo) {
+    var greens = [];
+    while (greens.length < 10) {
+      var index = (Math.random() * 20) | 0;
+      if (greens.indexOf(index) === -1) { greens.push(index); }
+    }
 
-  positions.forEach(function(position, index) {
-    position.player = greens.indexOf(index) !== -1 ? 1 : 2
-  });
+    positions.forEach(function(position, index) {
+      position.player = greens.indexOf(index) !== -1 ? 1 : 2
+    });
+  }
 
   return positions;
 };

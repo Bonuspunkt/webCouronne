@@ -51,6 +51,13 @@ function Channel(socket) {
 
   this.send = function(object) {
     if(!this.active) { return; }
+
+    if (object.gameState) {
+      if (object.gameState.puck &&
+          object.gameState.puck.x === null) { debugger; }
+      object.gameState = this.transformGameState(object.gameState);
+    }
+
     var data = JSON.stringify(object);
     socket.send(data);
   };
@@ -172,32 +179,14 @@ Channel.prototype.transformPosition = function(ball) {
   }
 };
 
-Channel.prototype.sendGameState = function(balls) {
-
-  switch (this.player) {
-    case 1: // spec
-      balls = balls.map(function(b) {
-        return {
-          x: b.x,
-          y: b.y,
-          player: b.player
-        };
-      });
-      break;
-
-    case 2:
-      balls = balls.map(function(b) {
-        return {
-          x: 300 - b.x,
-          y: 300 - b.y,
-          player: b.player
-        };
-      });
-      break;
+Channel.prototype.transformGameState = function(gameState) {
+  if (gameState.balls) {
+    gameState.balls = gameState.balls.map(this.transformPosition, this);
   }
-
-  this.send({ gameState: { balls: balls } });
+  if (gameState.puck) {
+    gameState.puck = this.transformPosition(gameState.puck);
+  }
+  return gameState;
 };
-
 
 module.exports = Channel;

@@ -153,7 +153,8 @@ Channel.prototype.transformPosition = function(ball) {
       result = {
         x: ball.y,
         y: ball.x,
-        player: ball.player
+        player: ball.player,
+        enabled: ball.enabled
       };
       if (ball.move) {
         result.move = { x: ball.move.y, y: ball.move.x };
@@ -165,6 +166,7 @@ Channel.prototype.transformPosition = function(ball) {
         x: ball.x,
         y: ball.y,
         player: ball.player,
+        enabled: ball.enabled
       };
       if (ball.move) {
         result.move = ball.move;
@@ -175,7 +177,8 @@ Channel.prototype.transformPosition = function(ball) {
       result = {
         x: 300 - ball.x,
         y: 300 - ball.y,
-        player: ball.player
+        player: ball.player,
+        enabled: ball.enabled
       };
       if (ball.move) {
         result.move = { x: -ball.move.x, y: -ball.move.y };

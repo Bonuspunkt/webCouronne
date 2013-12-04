@@ -1,0 +1,20 @@
+{
+  "name": "webCouronne",
+  "version": "0.0.0",
+  "description": "a 2D canvas port of DGM Couronne",
+  "main": "index.js",
+  "dependencies": {
+    "hna": "git://github.com/Bonuspunkt/hna.git",
+    "send": "~0.1.4",
+    "webmake": "~0.3.24",
+    "ws": "~0.4.31"
+  },
+  "devDependencies": {
+    "tap": "~0.4.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bonuspunkt",
+  "license": "BSD-2-Clause"
+}

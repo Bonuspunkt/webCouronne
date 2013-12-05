@@ -18,7 +18,7 @@ module.exports = {
         sourceMap: true,
         cache: true
       };
-      res.writeHead(200, {'content-type': 'application/json'});
+      res.writeHead(200, {'content-type': 'application/javascript'});
       webmake(wwwScriptRoot, webmakeOptions, function (err, content) {
         if (err) {
           console.log(err);

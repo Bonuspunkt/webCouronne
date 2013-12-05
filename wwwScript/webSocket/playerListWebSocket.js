@@ -1,5 +1,14 @@
 var safeJson = require('./safeJson');
 
+function getPlayerIcon(player) {
+  var icon = document.createElement('span');
+  icon.className = 'icon';
+  icon.style.background = player === 0 ? '#888' :
+                          (player === 1 ? '#4f4' : '#f44');
+
+  return icon;
+}
+
 module.exports = function(playerList, channel) {
   var playerListEl = playerList.querySelector('ul');
   var users = [];
@@ -9,11 +18,11 @@ module.exports = function(playerList, channel) {
     playerListEl.innerHTML = '';
     users.forEach(function(user) {
       var userEl = document.createElement('li');
-      userEl.textContent = '[' +
-        (user.player === 0 ? 'SPEC' : user.player) +
-        '] ' + user.name;
+      userEl.appendChild(getPlayerIcon(user.player));
+      userEl.appendChild(document.createTextNode(user.name));
+
       if (user.player === player) {
-        userEl.style.background = '#8f8';
+        userEl.className = 'active';
       }
       playerListEl.appendChild(userEl);
     });

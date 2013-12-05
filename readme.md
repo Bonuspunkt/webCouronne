@@ -19,14 +19,15 @@ this a simple 2d port of DGM Couronne.
 
 [source](http://dgm.6te.net/dgmcouronne/index-en.html)
 
-## install
+## install & running
+download zip/tarball and extract or
 ```
-npm install git://github.com/Bonuspunkt/webCouronne.git
+git clone git://github.com/Bonuspunkt/webCouronne.git
 ```
 
-## running
+then change into the directory and run
 ```
-cd node_modules/webCouronne/bin
-./webCouronne 8080
+npm install
+npm start
 ```
 open your browser and navigate to `http://localhost:8080`

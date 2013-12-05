@@ -13,6 +13,7 @@
     "tap": "~0.4.6"
   },
   "scripts": {
+    "start": "./bin/webCouronne.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bonuspunkt",

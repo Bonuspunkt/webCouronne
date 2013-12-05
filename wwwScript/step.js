@@ -56,8 +56,10 @@ module.exports = function step(gameTime) {
     if (game.deadCollection.indexOf(game.playerBall) !== -1) {
       result = RESULTS.FAILED;
     }
-    else if (!this.deadCollection[0] ||
-        this.deadCollection[0].player !== game.activePlayer) {
+    else if (!this.deadCollection.length ||
+        this.deadCollection.some(function(ball) {
+          return ball.player !== game.activePlayer;
+        })) {
       result = RESULTS.FINISHED;
     } else {
       result = RESULTS.CONTINUE;

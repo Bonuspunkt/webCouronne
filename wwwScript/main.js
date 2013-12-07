@@ -10,7 +10,7 @@ var socket = new WebSocket(wsUrl);
 
 socket.addEventListener('message', function(e) {
   console.log(e.data);
-})
+});
 socket.addEventListener('error', function() {
   console.log('error');
 });

@@ -50,4 +50,4 @@ MousePosition.prototype.draw = function(context) {
 };
 
 
-module.exports = MousePosition
+module.exports = MousePosition;

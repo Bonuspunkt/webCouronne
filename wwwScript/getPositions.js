@@ -26,7 +26,7 @@ module.exports = function(includePlayerInfo) {
     }
 
     positions.forEach(function(position, index) {
-      position.player = greens.indexOf(index) !== -1 ? 1 : 2
+      position.player = greens.indexOf(index) !== -1 ? 1 : 2;
     });
   }
 

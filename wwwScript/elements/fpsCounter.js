@@ -14,7 +14,7 @@ function FpsCounter() {
 
 util.inherits(FpsCounter, DrawableGameComponent);
 
-FpsCounter.prototype.update = function(ticks) {
+FpsCounter.prototype.update = function(/* ticks */) {
   var now = Date.now();
   var ticks = now - this.lastRender;
   this.lastRender = now;

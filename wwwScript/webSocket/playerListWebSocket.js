@@ -61,5 +61,5 @@ module.exports = function(playerList, channel) {
   channel.on('activePlayer', function(activePlayer) {
     player = activePlayer;
     rebuildUserList();
-  })
+  });
 };

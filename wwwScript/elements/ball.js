@@ -58,7 +58,7 @@ Ball.prototype.getColor = function() {
   if (this.player === 1)
     return this.enabled ? '#2F2' : '#080';
   if (this.player === 2)
-    return this.enabled ? '#F22' : '#800'
+    return this.enabled ? '#F22' : '#800';
 };
 
 Ball.prototype.update = function(gameTime) {

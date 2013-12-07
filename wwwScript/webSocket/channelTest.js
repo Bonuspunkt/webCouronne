@@ -98,6 +98,7 @@ test('should emit users', function(assert) {
 
   var expected = [{
     name: NAME, player: 1,
+  },{
     name: NAME2, player: 2
   }];
 
@@ -113,7 +114,7 @@ test('should emit users', function(assert) {
     data: JSON.stringify({
       users: expected
     })
-  })
+  });
 
 });
 
@@ -160,7 +161,7 @@ test('name and player has been set', function(assert) {
   });
 
   assert.equal(channel.name, NAME);
-  assert.equal(channel.player, 1)
+  assert.equal(channel.player, 1);
   assert.end();
 });
 
@@ -181,7 +182,7 @@ test('gameState player one', function(assert) {
 
   channel.on('gameState', function(gameState) {
     assert.deepEqual(gameState, expected);
-  })
+  });
 
   webSocket.emit('message', {
     data: JSON.stringify({ welcome: NAME })
@@ -225,7 +226,7 @@ test('gameState player two', function(assert) {
         player: 1
       }]
     });
-  })
+  });
 
   webSocket.emit('message', {
     data: JSON.stringify({ welcome: NAME })
@@ -263,4 +264,4 @@ test('gameState should emit activePlayer', function(assert) {
   channel.send({ gameState: { player: 1 } });
 
   assert.end();
-})
+});

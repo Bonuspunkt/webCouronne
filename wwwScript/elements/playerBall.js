@@ -104,7 +104,7 @@ PlayerBall.prototype.getColor = function() {
   if (this.game.state === STATES.READY && !this.isPuckPlacementValid()) {
     return '#FFB';
   }
-  return this.enabled ? '#FF0' : '#880'
+  return this.enabled ? '#FF0' : '#880';
 };
 
 PlayerBall.prototype.draw = function(context) {

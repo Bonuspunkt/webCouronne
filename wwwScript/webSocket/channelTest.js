@@ -175,7 +175,8 @@ test('gameState player one', function(assert) {
     balls: [{
       x: 100,
       y: 100,
-      player: 1
+      player: 1,
+      enabled: true
     }]
   };
 
@@ -212,7 +213,8 @@ test('gameState player two', function(assert) {
     balls: [{
       x: 100,
       y: 100,
-      player: 1
+      player: 1,
+      enabled: true
     }]
   };
 
@@ -223,7 +225,8 @@ test('gameState player two', function(assert) {
       balls: [{
         x: 200,
         y: 200,
-        player: 1
+        player: 1,
+        enabled: true
       }]
     });
   });

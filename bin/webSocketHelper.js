@@ -29,7 +29,7 @@ function WebSocketHelper(req, socket, head) {
       }
       catch (e) {
         // if the upgrade write fails, shut the connection down hard
-        try { socket.destroy(); } catch (e) {}
+        try { socket.destroy(); } catch (ex) {}
         return;
       }
 

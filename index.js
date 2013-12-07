@@ -13,6 +13,14 @@ var wwwScriptRoot = path.resolve(__dirname, 'wwwScript', 'main.js');
 module.exports = {
   handle: function (req, res) {
 
+    if (req.url === '/stats') {
+      res.writeHead(200, {'content-type': 'application/json'});
+      res.end(JSON.stringify(
+        require('./lib/channelRepo').getStats(),
+        null, '  '));
+      return;
+    }
+
     if(req.url === '/script.js') {
       var webmakeOptions = {
         sourceMap: true,
